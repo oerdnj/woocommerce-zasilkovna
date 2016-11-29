@@ -101,29 +101,19 @@ class WC_Zasilkovna_Shipping_Method extends WC_Shipping_Method {
     }
 
     public function admin_options() {
-        ?>
-        <h3><?php _e( 'Zásilkovna Settings', 'woocommerce-zasilkovna-shipping-method' ); ?></h3>
-        <div id="poststuff">
-          <div id="post-body" class="metabox-holder columns-2">
-            <div id="post-body-content">
-              <?php if($this->debug_mode == 'yes'): ?>
-              <div class="updated woocommerce-message">
-                <p><?php _e( 'Zásilkovna debug mode is activated, only administrators can use it.', 'woocommerce-zasilkovna-shipping-method' ); ?></p>
-              </div>
-              <?php endif; ?>
-              <?php if(version_compare(WC()->version, '2.6.0', 'lt')): ?>
-              <div class="error woocommerce-message">
-                <p><?php _e( 'This version only supports WooCommerce 2.6+', 'woocommerce-zasilkovna-shipping-method' ); ?></p>
-              </div>
-              <?php endif; ?>
-              <table class="form-table">
-                <?php echo $this->get_admin_options_html(); ?>
-              </table><!--/.form-table-->
-            </div>
-          </div>
+?>
+<?php if ($this->enabled && !$this->api_key): ?>
+        <div class="error">
+          <p><?php _e( 'Zásilkovna is enabled, but the API key has not been set.', 'woocommerce-zasilkovna-shipping-method' ); ?></p>
         </div>
-        <div class="clear"></div>
-        <?php
+<?php endif; ?>
+<?php if ($this->debug_mode == 'yes'): ?>
+        <div class="updated woocommerce-message">
+          <p><?php _e( 'Zásilkovna debug mode is activated, only administrators can use it.', 'woocommerce-zasilkovna-shipping-method' ); ?></p>
+        </div>
+<?php endif; ?>
+<?php
+        parent::admin_options();
     }
     
     public function calculate_shipping( $package = array() ) {
