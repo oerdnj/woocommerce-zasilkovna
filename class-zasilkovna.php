@@ -38,7 +38,7 @@ class WC_Zasilkovna_Shipping_Method extends WC_Shipping_Method {
 
     public function init_form_fields() {
 
-        $this->instance_form_field = array(
+        $this->instance_form_fields = array(
             'enabled' => array(
                 'title'       => __( 'Enable/Disable', 'woocommerce' ),
                 'type'		=> 'checkbox',
