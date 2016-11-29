@@ -27,7 +27,10 @@ class WC_Zasilkovna_Shipping_Method extends WC_Shipping_Method {
 
         $this->enabled = $this->get_option( 'enabled' );
         $this->title   = $this->get_option( 'title' );
+        $this->api_key = $this->get_option( 'api_key' );
 
+        $this->debug_mode = $this->get_option( 'debug_mode' );
+        
         $this->init_instance_settings();
       
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
