@@ -114,15 +114,43 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
         }
     }
 
-    add_action( 'woocommerce_admin_order_data_after_billing_address', 'woocommerce_zasilkovna_show_pickup_point' );
-    add_action( 'woocommerce_email_after_order_table', 'woocommerce_zasilkovna_show_pickup_point' );
-    add_action( 'woocommerce_order_details_after_order_table', 'woocommerce_zasilkovna_show_pickup_point' );
-    function woocommerce_zasilkovna_show_pickup_point( $order ) {
+    add_action( 'woocommerce_admin_order_data_after_billing_address', 'wc_zasilkovna_show_pickup_point' );
+    add_action( 'woocommerce_email_after_order_table', 'wc_zasilkovna_show_pickup_point' );
+    add_action( 'woocommerce_order_details_after_order_table', 'wc_zasilkovna_show_pickup_point' );
+    function wc_zasilkovna_show_pickup_point( $order ) {
         if ( $order->has_shipping_method( 'zasilkovna' ) ) {
             foreach ( $order->get_shipping_methods() as $shipping_item_id => $shipping_item ) {
                 $pickup_point_name = $order->get_item_meta( $shipping_item_id, 'zasilkovna-pickup-point-name', true );
                 print ( "<p><strong>Zásilkovna:</strong> " . $pickup_point_name . "</p>" );
             }
         }
+    }
+
+    add_filter( 'woocommerce_pay4pay_cod_amount', 'wc_zasilkovna_cod_amount' );
+    function wc_zasilkovna_cod_amount( $amount ) {
+        if ( sizeof( array_intersect( wc_get_chosen_shipping_method_ids(), array( 'zasilkovna') ) ) > 0 ) {
+            $package = WC()->shipping->get_packages()[0];
+            $shipping_methods = WC()->shipping->load_shipping_methods( $package );
+            $chosen_method_id = wc_get_chosen_shipping_method_instance_ids()[0];
+            $cod_rate = $shipping_methods[ $chosen_method_id ]->get_instance_option( 'cod_rate' );
+            if ( !empty( $cod_rate ) ) {
+                $amount = $cod_rate;
+            }
+        }
+        return $amount;
+    }
+
+    add_filter( 'woocommerce_available_payment_gateways', 'wc_zasilkovna_available_payment_gateways' );
+    function wc_zasilkovna_available_payment_gateways( $gateways ) {
+        if ( sizeof( array_intersect( wc_get_chosen_shipping_method_ids(), array( 'zasilkovna') ) ) > 0 ) {
+            $package = WC()->shipping->get_packages()[0];
+            $shipping_methods = WC()->shipping->load_shipping_methods( $package );
+            $chosen_method_id = wc_get_chosen_shipping_method_instance_ids()[0];
+            $cod_rate = $shipping_methods[ $chosen_method_id ]->get_instance_option( 'cod_rate' );
+            if ($cod_rate <= 0) {
+                unset($gateways['cod']);
+            }
+        }
+        return $gateways;
     }
 }

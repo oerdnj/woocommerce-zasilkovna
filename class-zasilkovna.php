@@ -119,7 +119,7 @@ class WC_Zasilkovna_Shipping_Method extends WC_Shipping_Method {
                 'title'       => __( 'COD rate', 'woocommerce' ),
                 'type'        => 'price',
                 'description' => __( 'Collect on Delivery additional rate '),
-                'default'     => '',
+                'default'     => null,
                 'css'         => 'width: 100px;',
                 'placeholder' => wc_format_localized_price( 0 )
             )
