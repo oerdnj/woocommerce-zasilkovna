@@ -69,9 +69,14 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
             $zasilkovna_pickup_points = $shipping_methods[ $chosen_method_id ]->pickup_points( $shipping_country );
             $zasilkovna_chosen_pickup_point = WC()->session->get( 'zasilkovna_chosen_pickup_point' );
+            $zasilkovna_logo = $shipping_methods[ $chosen_method_id ]->instance_settings['logo'];
 ?>
             <tr class="wc-zasilkovna">
-              <td><img src="<?php echo $settings['zasilkovna_logo']; ?>" width="160" border="0"></td>
+              <td><?php
+                  if ($zasilkovna_logo) { ?>
+                    <img src="<?php echo $zasilkovna_logo; ?>" width="160" border="0"><?php
+                  } ?>
+              </td>
               <td>
                 <font size="2"><?php _e('Zásilkovna - choose a pickup point', 'woocommerce-zasilkovna-shipping-method'); ?></font>
                 <div id="woocommerce-zasilkovna-branch-select-options">
