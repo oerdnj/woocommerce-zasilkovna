@@ -69,7 +69,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
             $zasilkovna_pickup_points = $shipping_methods[ $chosen_method_id ]->pickup_points( $shipping_country );
             $zasilkovna_chosen_pickup_point = WC()->session->get( 'zasilkovna_chosen_pickup_point' );
-			      $zasilkovna_logo = $shipping_methods[ $chosen_method_id ]->instance_settings['logo'];
+            $zasilkovna_logo = $shipping_methods[ $chosen_method_id ]->instance_settings['logo'];
 ?>
             <tr class="wc-zasilkovna">
               <td><?php
