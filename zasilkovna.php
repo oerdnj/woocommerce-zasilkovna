@@ -151,9 +151,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
             $package = WC()->shipping->get_packages()[0];
             $shipping_methods = WC()->shipping->load_shipping_methods( $package );
             $chosen_method_id = wc_get_chosen_shipping_method_instance_ids()[0];
-            $cod_rate = $shipping_methods[ $chosen_method_id ]->get_instance_option( 'cod_rate' );
-            if ($cod_rate <= 0) {
-                unset($gateways['cod']);
+            if (isset($shipping_methods[$chosen_method_id])) {
+                $cod_rate = $shipping_methods[ $chosen_method_id ]->get_instance_option( 'cod_rate' );
+                if ($cod_rate <= 0) {
+                    unset($gateways['cod']);
+                }
             }
         }
         return $gateways;
