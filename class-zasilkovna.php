@@ -205,7 +205,7 @@ class WC_Zasilkovna_Shipping_Method extends WC_Shipping_Method {
     }
 
     function fetch_pickup_points( $api_key ) {
-        $url = 'https://www.zasilkovna.cz/api/v3/' . $api_key . '/branch.json';
+        $url = 'https://www.zasilkovna.cz/api/v4/' . $api_key . '/branch.json';
         $result = wp_remote_get( $url );
         if ( is_wp_error( $result ) ) {
             throw new Exception( __METHOD__ . ": failed to get content from {$url}." );
