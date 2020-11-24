@@ -4,7 +4,7 @@
  * Plugin Name:       Zásilkovna Shipping Method
  * Plugin URI:        https://github.com/oerdnj/woocommerce-zasilkovna
  * Description:       Zásilkovna Shipping Method
- * Version:           0.1
+ * Version:           0.1.1
  * Author:            Ondřej Surý
  * Author URI:        https://github.com/oerdnj/
  * Text Domain:       woocommerce-zasilkovna
@@ -12,6 +12,7 @@
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
  * Domain Path:       /languages
  * GitHub Plugin URI: https://github.com/oerdnj/woocommerce-zasilkovna
+ * WC tested up to: 4.7.0
  */
 
 
@@ -28,7 +29,7 @@ function wc_zasilkovna_get_pickup_point( $pickup_point_id ) {
         return $pickup_point;
     }
     return null;
-}    
+}
 
 /**
  * Gets chosen shipping method instance IDs from chosen_shipping_methods session
@@ -54,15 +55,17 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
     function wc_zasilkovna_shipping_method_init() {
         require 'class-zasilkovna.php';
     }
-    
+
     add_action( 'woocommerce_review_order_after_shipping', 'wc_zasilkovna_review_order_after_shipping' );
 
     function wc_zasilkovna_review_order_after_shipping() {
-    
+
         $package = WC()->shipping->get_packages()[0];
 
         $shipping_methods = WC()->shipping->load_shipping_methods( $package );
-
+        if (!function_exists('wc_get_chosen_shipping_method_ids')) {
+            require_once ABSPATH . PLUGINDIR . '/woocommerce/includes/wc-cart-functions.php';
+        }
         if ( sizeof( array_intersect( wc_get_chosen_shipping_method_ids(), array( 'zasilkovna') ) ) > 0 ) {
             $chosen_method_id = wc_get_chosen_shipping_method_instance_ids()[0];
             $shipping_country = WC()->customer->get_shipping_country();
@@ -96,10 +99,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
         }
         return true;
     }
-    
+
     add_action( 'woocommerce_add_shipping_order_item', 'wc_zasilkovna_save_pickup_point', 10, 2 );
     function wc_zasilkovna_save_pickup_point( $order_id, $item_id ) {
         if ( isset( $_POST["zasilkovna_pickup_point"] ) ) {
+            if (!function_exists('wc_get_chosen_shipping_method_ids')) {
+                require_once ABSPATH . PLUGINDIR . '/woocommerce/includes/wc-cart-functions.php';
+            }
             if ( sizeof( array_intersect( wc_get_chosen_shipping_method_ids(), array( 'zasilkovna') ) ) > 0 ) {
                 $pickup_point_id = wc_clean( $_POST['zasilkovna_pickup_point'] );
                 $pickup_point = wc_zasilkovna_get_pickup_point( $pickup_point_id );
@@ -133,6 +139,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
     add_filter( 'woocommerce_pay4pay_cod_amount', 'wc_zasilkovna_cod_amount' );
     function wc_zasilkovna_cod_amount( $amount ) {
+        if (!function_exists('wc_get_chosen_shipping_method_ids')) {
+            require_once ABSPATH . PLUGINDIR . '/woocommerce/includes/wc-cart-functions.php';
+        }
         if ( sizeof( array_intersect( wc_get_chosen_shipping_method_ids(), array( 'zasilkovna') ) ) > 0 ) {
             $package = WC()->shipping->get_packages()[0];
             $shipping_methods = WC()->shipping->load_shipping_methods( $package );
@@ -147,6 +156,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
     add_filter( 'woocommerce_available_payment_gateways', 'wc_zasilkovna_available_payment_gateways' );
     function wc_zasilkovna_available_payment_gateways( $gateways ) {
+        if (!function_exists('wc_get_chosen_shipping_method_ids')) {
+            require_once ABSPATH . PLUGINDIR . '/woocommerce/includes/wc-cart-functions.php';
+        }
         if ( sizeof( array_intersect( wc_get_chosen_shipping_method_ids(), array( 'zasilkovna') ) ) > 0 ) {
             $package = WC()->shipping->get_packages()[0];
             $shipping_methods = WC()->shipping->load_shipping_methods( $package );
