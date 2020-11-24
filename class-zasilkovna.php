@@ -9,7 +9,7 @@ define( "WC_ZASILKOVNA_TTL", 24 * 60 * 60 );
 class WC_Zasilkovna_Pickup_Points_By_Country extends FilterIterator {
     private $country = '';
     private $pickup_points = array();
-    
+
     public function __construct( $iterator, $shipping_country ) {
         switch ( $shipping_country ) {
         case 'CZ':
@@ -44,7 +44,7 @@ class WC_Zasilkovna_Shipping_Method extends WC_Shipping_Method {
     /**
      * Constructor. The instance ID is passed to this.
      */
-    
+
     public function __construct( $instance_id = 0 ) {
         $this->id                  = 'zasilkovna';
         $this->instance_id         = absint( $instance_id );
@@ -53,7 +53,7 @@ class WC_Zasilkovna_Shipping_Method extends WC_Shipping_Method {
 
         $this->init_form_fields();
         $this->init_settings();
-        
+
         $this->supports            = array(
             'shipping-zones',
             'instance-settings',
@@ -64,9 +64,9 @@ class WC_Zasilkovna_Shipping_Method extends WC_Shipping_Method {
         $this->title               = $this->get_option( 'title' );
 
         $this->debug_mode          = $this->get_option( 'debug_mode' );
-        
+
         $this->init_instance_settings();
-      
+
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
     }
 
@@ -133,7 +133,7 @@ class WC_Zasilkovna_Shipping_Method extends WC_Shipping_Method {
 
         return true;
     }
-    
+
     public function admin_options() {
 ?>
 <?php if ( !function_exists( 'curl_version' ) ): ?>
@@ -154,7 +154,7 @@ class WC_Zasilkovna_Shipping_Method extends WC_Shipping_Method {
 <?php
         parent::admin_options();
     }
-    
+
     public function calculate_shipping( $package = array() ) {
         $rate = array(
             'id' => $this->get_rate_id(),
@@ -174,17 +174,17 @@ class WC_Zasilkovna_Shipping_Method extends WC_Shipping_Method {
         }
         return null;
     }
-    
+
     public function pickup_points( $country ) {
         if ( sizeof( $this->pickup_points ) == 0 ) {
             $this->load_pickup_points();
         }
-        
+
         $iterator = new ArrayIterator( $this->pickup_points );
-        
+
         return new WC_Zasilkovna_Pickup_Points_By_Country( $iterator, $country );
     }
-    
+
     function load_pickup_points() {
         $api_key = $this->get_option( 'api_key' );
         if ($api_key) {
@@ -222,10 +222,10 @@ class WC_Zasilkovna_Shipping_Method extends WC_Shipping_Method {
         if ( json_last_error() !== JSON_ERROR_NONE ) {
             throw new Exception( __METHOD__ . ": JSON decode error: " . json_last_error() );
         }
-        if ( sizeof( $json->data ) <= 0 ) {
+        if ( empty( $json->data ) <= 0 ) {
             throw new Exception( __METHOD__ . ": JSON data empty." );
         }
-        
+
         return $json->data;
-    }    
+    }
 }
