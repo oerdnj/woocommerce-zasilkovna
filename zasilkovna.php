@@ -4,7 +4,7 @@
  * Plugin Name:       Zásilkovna Shipping Method
  * Plugin URI:        https://github.com/oerdnj/woocommerce-zasilkovna
  * Description:       Zásilkovna Shipping Method
- * Version:           0.1
+ * Version:           0.1.1
  * Author:            Ondřej Surý
  * Author URI:        https://github.com/oerdnj/
  * Text Domain:       woocommerce-zasilkovna
@@ -12,6 +12,7 @@
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
  * Domain Path:       /languages
  * GitHub Plugin URI: https://github.com/oerdnj/woocommerce-zasilkovna
+ * WC tested up to: 4.7.0
  */
 
 

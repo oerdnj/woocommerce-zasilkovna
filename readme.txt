@@ -48,6 +48,11 @@ Aktivace plateb na dobírku vyžaduje instalaci plugin WooCommerce Pay for Payme
 
 == Changelog ==
 
+= 0.1.1 =
+* WC 4.7.0 Compatibility tested
+* Fix: Undefined wc_get_chosen_shipping_method_ids()
+* Fix: Countable error on stdClass
+
 = 0.1 =
 * První verze
 
