@@ -222,7 +222,7 @@ class WC_Zasilkovna_Shipping_Method extends WC_Shipping_Method {
         if ( json_last_error() !== JSON_ERROR_NONE ) {
             throw new Exception( __METHOD__ . ": JSON decode error: " . json_last_error() );
         }
-        if ( empty( $json->data ) <= 0 ) {
+        if ( empty( $json->data ) ) {
             throw new Exception( __METHOD__ . ": JSON data empty." );
         }
 
